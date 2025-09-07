@@ -95,7 +95,7 @@ This app uses a small server layer (Next.js routes) to keep the frontend simple.
 
 * **Forecast:** `https://api.open-meteo.com/v1/forecast`
 * **Forward geocoding (search):** `https://geocoding-api.open-meteo.com/v1/search`
-* **Reverse geocoding (coords → label):** `https://geocoding-api.open-meteo.com/v1/reverse`
+* **Reverse geocoding (coords → label):** `https://nominatim.openstreetmap.org/reverse`
 
 ### App API routes
 
