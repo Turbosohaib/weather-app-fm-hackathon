@@ -1,0 +1,28 @@
+export const WMO: Record<number, { label: string; icon: string }> = {
+  0: { label: 'Clear', icon: '/assets/images/icon-sunny.webp' },
+  1: { label: 'Mainly clear', icon: '/assets/images/icon-partly-cloudy.webp' },
+  2: { label: 'Partly cloudy', icon: '/assets/images/icon-partly-cloudy.webp' },
+  3: { label: 'Overcast', icon: '/assets/images/icon-overcast.webp' },
+  45: { label: 'Fog', icon: '/assets/images/icon-fog.webp' },
+  48: { label: 'Depositing rime fog', icon: '/assets/images/icon-fog.webp' },
+  51: { label: 'Drizzle', icon: '/assets/images/icon-drizzle.webp' },
+  53: { label: 'Drizzle', icon: '/assets/images/icon-drizzle.webp' },
+  55: { label: 'Drizzle', icon: '/assets/images/icon-drizzle.webp' },
+  61: { label: 'Rain', icon: '/assets/images/icon-rain.webp' },
+  63: { label: 'Rain', icon: '/assets/images/icon-rain.webp' },
+  65: { label: 'Rain', icon: '/assets/images/icon-rain.webp' },
+  66: { label: 'Freezing rain', icon: '/assets/images/icon-rain.webp' },
+  67: { label: 'Freezing rain', icon: '/assets/images/icon-rain.webp' },
+  71: { label: 'Snow', icon: '/assets/images/icon-snow.webp' },
+  73: { label: 'Snow', icon: '/assets/images/icon-snow.webp' },
+  75: { label: 'Snow', icon: '/assets/images/icon-snow.webp' },
+  77: { label: 'Snow grains', icon: '/assets/images/icon-snow.webp' },
+  80: { label: 'Showers', icon: '/assets/images/icon-rain.webp' },
+  81: { label: 'Showers', icon: '/assets/images/icon-rain.webp' },
+  82: { label: 'Heavy showers', icon: '/assets/images/icon-rain.webp' },
+  95: { label: 'Thunderstorm', icon: '/assets/images/icon-storm.webp' },
+  96: { label: 'Thunderstorm w/ hail', icon: '/assets/images/icon-storm.webp' },
+  99: { label: 'Thunderstorm w/ hail', icon: '/assets/images/icon-storm.webp' },
+};
+export const iconFor = (code?: number) => WMO[code ?? 0]?.icon ?? WMO[0].icon;
+export const labelFor = (code?: number) => WMO[code ?? 0]?.label ?? '—';

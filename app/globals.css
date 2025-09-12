@@ -1,26 +1,47 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fonts (local) */
+@font-face {
+  font-family: 'DM Sans Var';
+  src: url('/public/assets/fonts/DMSans-Variable.ttf') format('truetype');
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bricolage Var';
+  src: url('/public/assets/fonts/BricolageGrotesque-Variable.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-sans: 'DM Sans Var';
+  --font-display: 'Bricolage Var';
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  background: hsl(243 96% 9%); /* Neutral 900 */
+  color: hsl(0 0% 100%);
+}
+
+/* Reusable tokens */
+.container-pad {
+  @apply mx-auto max-w-[1100px] px-4 md:px-8;
+}
+
+.card {
+  @apply rounded-xl border border-neutral-700 bg-neutral-800/80 shadow-card backdrop-blur;
+}
+
+.metric {
+  @apply card flex min-w-[150px] flex-col gap-6 p-5 md:px-6 md:py-4;
+}
+
+.h1 {
+  @apply text-center font-display text-5xl font-bold text-neutral-0 md:text-left;
 }
