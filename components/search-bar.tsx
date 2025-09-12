@@ -190,7 +190,7 @@ export default function SearchBar({
                   <span>Search in progress</span>
                 </div>
               ) : (
-                <ul className="max-h-72 overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20 hover:scrollbar-thumb-white/40">
+                <ul className="max-h-72 overflow-auto [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-2">
                   {/* Always-on “Current Location” row while focused/open */}
                   {showCurrent && (
                     <li>

@@ -1,5 +1,3 @@
-import scrollbar from 'tailwind-scrollbar';
-
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   darkMode: ['class'],
@@ -32,5 +30,5 @@ export default {
       },
     },
   },
-  plugins: [scrollbar({ nocompatible: true })],
+  plugins: [],
 };
