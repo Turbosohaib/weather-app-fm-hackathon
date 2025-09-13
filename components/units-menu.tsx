@@ -32,12 +32,12 @@ export default function UnitsMenu({
   // shared classes for the selectable rows
   const row =
     // hide default left indicator, tile look, hover & checked styles, right check visibility
-    'group relative flex items-center justify-between cursor-pointer' +
+    'group relative flex items-center justify-between' +
     'rounded-lg px-4 py-3 text-base outline-none' +
     'border border-transparent bg-transparent ' +
     'data-[highlighted]:bg-neutral-700 rounded-lg data-[state=checked]:bg-neutral-700 ' +
     'data-[state=checked]:border-neutral-800 ' +
-    '[&>span:nth-child(1)]:hidden'; // hide shadcn’s default left indicator
+    '[&>span:nth-child(1)]:hidden';
 
   const RightCheck = ({ checked }: { checked: boolean }) => (
     <Image
@@ -65,7 +65,7 @@ export default function UnitsMenu({
       <DropdownMenuContent
         align="end"
         sideOffset={8}
-        className="w-60 rounded-2xl border border-neutral-700 bg-neutral-800/95 p-2 text-neutral-0 shadow-xl backdrop-blur"
+        className="w-60 rounded-2xl space-y-1 border border-neutral-700 bg-neutral-800/95 p-2 text-neutral-0 shadow-xl backdrop-blur"
       >
         <DropdownMenuLabel className="px-2 pb-1 pt-2 text-base text-neutral-0">
           Switch to {value.tUnit === 'celsius' ? 'Imperial' : 'Metric'}
@@ -84,7 +84,7 @@ export default function UnitsMenu({
               key={u}
               checked={checked}
               onCheckedChange={() => toggle('tUnit', u)}
-              className={row}
+              className={`${row} cursor-pointer`}
             >
               {/* label area (we hid the default indicator with CSS) */}
               <div>{u === 'celsius' ? 'Celsius (°C)' : 'Fahrenheit (°F)'}</div>
@@ -106,7 +106,7 @@ export default function UnitsMenu({
               key={u}
               checked={checked}
               onCheckedChange={() => toggle('wUnit', u)}
-              className={row}
+              className={`${row} cursor-pointer`}
             >
               <div>{u === 'kmh' ? 'km/h' : 'mph'}</div>
               <RightCheck checked={checked} />
@@ -127,7 +127,7 @@ export default function UnitsMenu({
               key={u}
               checked={checked}
               onCheckedChange={() => toggle('pUnit', u)}
-              className={row}
+              className={`${row} cursor-pointer`}
             >
               <div>{u === 'mm' ? 'Millimeters (mm)' : 'Inches (in)'}</div>
               <RightCheck checked={checked} />

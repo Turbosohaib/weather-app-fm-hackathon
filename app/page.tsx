@@ -175,7 +175,7 @@ export default function Page() {
         <ErrorState msg={error} onRetry={() => place && load(place.latitude, place.longitude)} />
       ) : (
         <div className="flex flex-col items-center justify-center">
-          <div className="h1 my-14 max-w-[350px] text-center lg:max-w-[800px]">
+          <div className="h1 mb-10 mt-5 max-w-[300px] sm:max-w-[350px] text-center lg:max-w-[800px]">
             How’s the sky looking today?
           </div>
 
@@ -200,7 +200,7 @@ export default function Page() {
           {!loading && !error && place && data && (
             <>
               <section className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
-                <div className="flex flex-col justify-between gap-2">
+                <div className="flex flex-col justify-between gap-6">
                   <CurrentCard place={place} data={data} />
 
                   <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -322,15 +322,15 @@ function LoadingSkeleton() {
           <h3 className="font-semibold">Daily forecast</h3>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-7">
             {Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} className="h-[170px] rounded-xl border border-neutral-700 bg-neutral-800" />
+              <Skeleton key={i} className="h-[163px] rounded-xl border border-neutral-700 bg-neutral-800" />
             ))}
           </div>
         </section>
       </div>
 
       {/* RIGHT COLUMN: Hourly panel skeleton */}
-      <Card className="flex w-full flex-col gap-4 rounded-2xl border border-neutral-700 bg-neutral-800 py-4 pl-4 pr-0">
-        <div className="flex items-center justify-between pr-4 pt-1">
+      <Card className="flex w-full flex-col gap-4 rounded-2xl border border-neutral-700 bg-neutral-800 py-2 pl-4 pr-0">
+        <div className="flex items-center justify-between pr-4 pt-3">
           <div className="text-lg font-semibold">Hourly forecast</div>
           {/* day dropdown placeholder */}
           <div className="flex items-center gap-2 h-8 place-items-center rounded-md bg-[#3C3B5D] px-3 text-3xl font-thin text-neutral-100">
@@ -341,7 +341,7 @@ function LoadingSkeleton() {
         {/* list items placeholders */}
         <div className="space-y-3.5 pr-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-[55px] rounded-lg border border-neutral-600 bg-neutral-700" />
+            <Skeleton key={i} className="h-[54.5px] rounded-lg border border-neutral-600 bg-neutral-700" />
           ))}
         </div>
       </Card>

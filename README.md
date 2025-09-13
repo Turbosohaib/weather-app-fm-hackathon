@@ -46,7 +46,8 @@ Users should be able to:
 
 ### Screenshot
 
-![Desktop](./public/design/desktop-design-imperial.jpg)
+![Desktop](img.png)
+![Tablet](img_1.png)
 ![Mobile](./public/design/mobile-design-imperial.jpg)
 
 ### Links
