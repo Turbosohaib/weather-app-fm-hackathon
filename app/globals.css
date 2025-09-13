@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fonts (local) */
-@font-face {
-  font-family: 'DM Sans Var';
-  src: url('/public/assets/fonts/DMSans-Variable.ttf') format('truetype');
-  font-weight: 300 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bricolage Var';
-  src: url('/public/assets/fonts/BricolageGrotesque-Variable.ttf') format('truetype');
-  font-weight: 700;
-  font-display: swap;
-}
-
 :root {
   --font-sans: 'DM Sans Var';
   --font-display: 'Bricolage Var';
@@ -43,5 +28,151 @@ body {
 }
 
 .h1 {
-  @apply text-center font-display text-5xl font-bold text-neutral-0 md:text-left;
+  @apply text-start font-display text-5xl font-bold text-neutral-0 md:text-left;
+}
+
+/* =========================
+   Animation Utilities
+   ========================= */
+@layer utilities {
+  /* --- Subtle entrances --- */
+  @keyframes fade-in-up { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  .animate-fade-in-up { animation: fade-in-up .45s both; }
+
+  @keyframes pop-in { 0% { opacity: 0; transform: scale(.96) translateY(6px) } 100% { opacity: 1; transform: none } }
+  .animate-pop-in { animation: pop-in .35s cubic-bezier(.22,.7,.28,1) both; }
+
+  /* --- Bobbing / spins --- */
+  @keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
+  .animate-float { animation: float 3.6s ease-in-out infinite; }
+
+  @keyframes slow-spin { to { transform: rotate(360deg) } }
+  .animate-slow-spin { animation: slow-spin 22s linear infinite; }
+
+  /* --- Caret blink (typewriter cursor) --- */
+  @keyframes caret { 0%,40% { opacity: 1 } 50%,100% { opacity: 0 } }
+  .animate-caret { animation: caret 1s steps(1) infinite; }
+
+  /* --- Animated gradient backgrounds --- */
+  @keyframes gradient-shift { 0%{ background-position: 0% 50% } 100%{ background-position: 100% 50% } }
+  .bg-animate { background-size: 200% 200%; animation: gradient-shift 14s ease-in-out infinite; }
+
+  /* --- Star grid slow pan (layout background) --- */
+  @keyframes star-pan { from { background-position: 0 0 } to { background-position: 1000px 1000px } }
+  .animate-star-pan { animation: star-pan 60s linear infinite; }
+
+  /* --- Typewriter reveal (header) ---
+     Usage: <span class="typewriter" style="--type-chars: 28">Your text…</span>
+  */
+  @keyframes typing { from { width: 0ch } to { width: var(--type-chars, 30)ch } }
+  .typewriter {
+    --type-chars: 30;
+    width: 0ch;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    animation: typing 1.8s steps(var(--type-chars, 30)) both;
+  }
+  .typewriter::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 0.9em;
+    margin-left: .125em;
+    background: currentColor;
+    vertical-align: -0.05em;
+    animation: caret 1s steps(1) infinite;
+  }
+
+  /* --- Skeleton shimmer (optional: add `skeleton-shimmer` alongside <Skeleton />) --- */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton-shimmer {
+    background-image: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0.06) 40%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* --- Staggered fade-in for lists/cards ---
+     Usage: <ul class="stagger-fade-in"> ... </ul>
+  */
+  .stagger-fade-in > * { animation: fade-in-up .45s both; }
+  .stagger-fade-in > *:nth-child(1) { animation-delay: .02s }
+  .stagger-fade-in > *:nth-child(2) { animation-delay: .06s }
+  .stagger-fade-in > *:nth-child(3) { animation-delay: .10s }
+  .stagger-fade-in > *:nth-child(4) { animation-delay: .14s }
+  .stagger-fade-in > *:nth-child(5) { animation-delay: .18s }
+  .stagger-fade-in > *:nth-child(6) { animation-delay: .22s }
+  .stagger-fade-in > *:nth-child(7) { animation-delay: .26s }
+  .stagger-fade-in > *:nth-child(8) { animation-delay: .30s }
+  .stagger-fade-in > *:nth-child(9) { animation-delay: .34s }
+  .stagger-fade-in > *:nth-child(10) { animation-delay: .38s }
+  .stagger-fade-in > *:nth-child(11) { animation-delay: .42s }
+  .stagger-fade-in > *:nth-child(12) { animation-delay: .46s }
+
+  /* --- Aurora background shapes (layout) --- */
+  .aurora-shape {
+    position: absolute;
+    width: 55vw;
+    height: 55vh;
+    border-radius: 9999px;
+    filter: blur(60px);
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+  }
+  .aurora-1 {
+    background:
+            radial-gradient(40% 65% at 50% 50%, #60a5fa66 0%, transparent 60%),
+            radial-gradient(35% 60% at 65% 40%, #22d3ee55 0%, transparent 65%);
+    animation: aurora-anim-1 20s ease-in-out infinite;
+  }
+  .aurora-2 {
+    background:
+            radial-gradient(42% 65% at 50% 50%, #a78bfa66 0%, transparent 60%),
+            radial-gradient(38% 60% at 40% 55%, #60a5fa55 0%, transparent 65%);
+    animation: aurora-anim-2 24s ease-in-out infinite reverse;
+  }
+  .aurora-3 {
+    background:
+            radial-gradient(40% 65% at 50% 50%, #22d3ee55 0%, transparent 60%),
+            radial-gradient(35% 55% at 55% 45%, #0ea5e955 0%, transparent 65%);
+    animation: aurora-anim-3 28s ease-in-out infinite;
+  }
+
+  @keyframes aurora-anim-1 {
+    0%   { transform: translate(-8%, -6%) rotate(0deg) scale(1); }
+    50%  { transform: translate(6%, -14%) rotate(10deg) scale(1.05); }
+    100% { transform: translate(-8%, -6%) rotate(0deg) scale(1); }
+  }
+  @keyframes aurora-anim-2 {
+    0%   { transform: translate(6%, 4%) rotate(0deg) scale(1); }
+    50%  { transform: translate(-10%, -10%) rotate(-8deg) scale(1.04); }
+    100% { transform: translate(6%, 4%) rotate(0deg) scale(1); }
+  }
+  @keyframes aurora-anim-3 {
+    0%   { transform: translate(-4%, 6%) rotate(0deg) scale(1); }
+    50%  { transform: translate(8%, -8%) rotate(6deg) scale(1.06); }
+    100% { transform: translate(-4%, 6%) rotate(0deg) scale(1); }
+  }
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-pop-in,
+  .animate-float,
+  .animate-slow-spin,
+  .bg-animate,
+  .animate-star-pan,
+  .typewriter,
+  .typewriter::after,
+  .skeleton-shimmer,
+  .stagger-fade-in > *,
+  .aurora-1,
+  .aurora-2,
+  .aurora-3 {
+    animation: none !important;
+  }
 }

@@ -40,82 +40,57 @@ export default function SearchBar({
   const abortRef = useRef<AbortController | null>(null);
   const forceOpenRef = useRef(false);
 
-  // keep latest callback in a ref so doSearch can be stable
   const onNoResultsRef = useRef(onNoResultsAction);
-  useEffect(() => {
-    onNoResultsRef.current = onNoResultsAction;
-  }, [onNoResultsAction]);
+  useEffect(() => { onNoResultsRef.current = onNoResultsAction; }, [onNoResultsAction]);
 
-  // Apply parent-provided text once when it changes (do not read `q` here)
   useEffect(() => {
     if (typeof valueOverride === 'string') {
-      ignoreNextQuery.current = true; // don't trigger debounce cycle
+      ignoreNextQuery.current = true;
       setQ(valueOverride);
       setOpen(false);
       setResults([]);
     }
   }, [valueOverride]);
 
-  // ---- shared fetcher (stable) ----
   const doSearch = useCallback(async (term: string) => {
     const query = term.trim();
-
     if (!query) {
       setResults([]);
       if (focused.current || forceOpenRef.current) {
-        setShowCurrent(true); // show “Current Location” even with empty query
+        setShowCurrent(true);
         setOpen(true);
       }
       return;
     }
-
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
-
     setLoading(true);
-
     try {
-      const r = await fetch(`/api/geocode?q=${encodeURIComponent(query)}&lang=en`, {
-        signal: ac.signal,
-      });
+      const r = await fetch(`/api/geocode?q=${encodeURIComponent(query)}&lang=en`, { signal: ac.signal });
       const j = await r.json();
       const items: Place[] = j?.results ?? [];
       setResults(items);
-
       if (items.length === 0) onNoResultsRef.current?.();
-
       if (focused.current || forceOpenRef.current) setOpen(true);
-    } catch {
-      /* ignore */
     } finally {
       setLoading(false);
       forceOpenRef.current = false;
     }
   }, []);
 
-  // Debounced search while typing
   useEffect(() => {
-    if (ignoreNextQuery.current) {
-      ignoreNextQuery.current = false;
-      return;
-    }
+    if (ignoreNextQuery.current) { ignoreNextQuery.current = false; return; }
     if (debounceId.current) clearTimeout(debounceId.current);
 
     if (!q.trim()) {
       setResults([]);
-      if (focused.current) {
-        setShowCurrent(true);
-        setOpen(true);
-      } else {
-        setShowCurrent(false);
-        setOpen(false);
-      }
+      if (focused.current) { setShowCurrent(true); setOpen(true); }
+      else { setShowCurrent(false); setOpen(false); }
       return;
     }
 
     debounceId.current = setTimeout(() => void doSearch(q), 300);
-
     return () => {
       if (debounceId.current) clearTimeout(debounceId.current);
       abortRef.current?.abort();
@@ -135,7 +110,7 @@ export default function SearchBar({
   const handleUseCurrent = async () => {
     setOpen(false);
     setResults([]);
-    setQ('Current Location'); // exact label
+    setQ('Current Location');
     inputRef.current?.blur();
     await onUseCurrentLocationAction?.();
   };
@@ -152,48 +127,31 @@ export default function SearchBar({
             ref={inputRef}
             placeholder="Search for a place..."
             value={q}
-            onFocus={() => {
-              focused.current = true;
-              setShowCurrent(true); // show “Current Location” on focus
-              setOpen(true); // open dropdown immediately
-            }}
+            onFocus={() => { focused.current = true; setShowCurrent(true); setOpen(true); }}
             onBlur={() => {
               focused.current = false;
-              setTimeout(() => {
-                if (!forceOpenRef.current) {
-                  setOpen(false);
-                  setShowCurrent(false);
-                }
-              }, 100);
+              setTimeout(() => { if (!forceOpenRef.current) { setOpen(false); setShowCurrent(false); } }, 100);
             }}
             onChange={(e) => setQ(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                forceOpenRef.current = true;
-                void doSearch(q);
-              }
-            }}
-            className="w-full rounded-lg border-neutral-700 bg-neutral-800 py-4 pl-14 pr-4 text-neutral-0 placeholder:text-xl placeholder:text-neutral-300"
+            onKeyDown={(e) => { if (e.key === 'Enter') { forceOpenRef.current = true; void doSearch(q); } }}
+            className="w-full rounded-lg border-neutral-700 bg-neutral-800 py-4 pl-14 pr-4 text-neutral-0 placeholder:text-xl placeholder:text-neutral-300
+             transition-transform duration-150 focus:scale-[1.01]"
           />
 
           {open && (
-            <Card className="absolute z-20 mt-2 w-full border-neutral-700 bg-neutral-800/95 p-1.5">
+            <Card
+              className="absolute z-20 mt-2 w-full border-neutral-700 bg-neutral-800/95 p-1.5 animate-fade-in-up"
+              style={{ animationDelay: '40ms' }}
+            >
               {loading ? (
                 <div className="flex items-center gap-3 rounded-lg px-4 py-3 text-neutral-200">
-                  <Image
-                    src="/assets/images/icon-loading.svg"
-                    alt="loading"
-                    width={18}
-                    height={18}
-                    className="animate-spin"
-                  />
+                  <Image src="/assets/images/icon-loading.svg" alt="loading" width={18} height={18} className="animate-spin" />
                   <span>Search in progress</span>
                 </div>
               ) : (
                 <ul className="max-h-72 overflow-auto [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-2">
-                  {/* Always-on “Current Location” row while focused/open */}
                   {showCurrent && (
-                    <li>
+                    <li className="animate-fade-in-up" style={{ animationDelay: '30ms' }}>
                       <button
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={handleUseCurrent}
@@ -204,7 +162,7 @@ export default function SearchBar({
                     </li>
                   )}
                   {results.map((p, i) => (
-                    <li key={i}>
+                    <li key={i} className="animate-fade-in-up" style={{ animationDelay: `${60 + i * 25}ms` }}>
                       <button
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => handleSelect(p)}
@@ -223,11 +181,8 @@ export default function SearchBar({
         </div>
 
         <button
-          onClick={() => {
-            forceOpenRef.current = true;
-            void doSearch(q);
-          }}
-          className="w-full rounded-lg bg-blue-500 px-6 py-4 hover:bg-blue-700 sm:w-fit"
+          onClick={() => { forceOpenRef.current = true; void doSearch(q); }}
+          className="w-full rounded-lg bg-blue-500 px-6 py-4 hover:bg-blue-700 sm:w-fit transition-transform active:scale-[0.99]"
         >
           Search
         </button>

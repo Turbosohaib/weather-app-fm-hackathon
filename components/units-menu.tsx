@@ -65,7 +65,7 @@ export default function UnitsMenu({
       <DropdownMenuContent
         align="end"
         sideOffset={8}
-        className="w-60 rounded-2xl space-y-1 border border-neutral-700 bg-neutral-800/95 p-2 text-neutral-0 shadow-xl backdrop-blur"
+        className="w-60 space-y-1 rounded-2xl border border-neutral-700 bg-neutral-800/95 p-2 text-neutral-0 shadow-xl backdrop-blur"
       >
         <DropdownMenuLabel className="px-2 pb-1 pt-2 text-base text-neutral-0">
           Switch to {value.tUnit === 'celsius' ? 'Imperial' : 'Metric'}

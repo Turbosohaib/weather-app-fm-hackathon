@@ -48,12 +48,12 @@ Users should be able to:
 
 ![Desktop](img.png)
 ![Tablet](img_1.png)
-![Mobile](./public/design/mobile-design-imperial.jpg)
+![Mobile](img_2.png)
 
 ### Links
 
 - Solution URL: [https://my-solution-url.com](https://my-solution-url.com)
-- Live Site URL: [https://my-live-site-url.com](https://my-live-site-url.com)
+- Live Site URL: [Live Website Weather Now](https://weather-app-fm-hackathon.vercel.app/)
 
 ---
 
@@ -94,9 +94,9 @@ This app uses a small server layer (Next.js routes) to keep the frontend simple.
 
 ### External APIs used
 
-* **Forecast:** `https://api.open-meteo.com/v1/forecast`
-* **Forward geocoding (search):** `https://geocoding-api.open-meteo.com/v1/search`
-* **Reverse geocoding (coords → label):** `https://geocoding-api.open-meteo.com/v1/reverse`
+- **Forecast:** `https://api.open-meteo.com/v1/forecast`
+- **Forward geocoding (search):** `https://geocoding-api.open-meteo.com/v1/search`
+- **Reverse geocoding (coords → label):** `https://geocoding-api.open-meteo.com/v1/reverse`
 
 ### App API routes
 

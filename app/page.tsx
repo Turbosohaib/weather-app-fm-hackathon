@@ -11,6 +11,8 @@ import { fmtDay, fmtTime } from '@/lib/format';
 import CurrentCard from '@/components/CurrentCard';
 import HourlyPanel from '@/components/HourlyPanel';
 import { Place, Weather } from '@/types';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'; // ⟵ NEW
+import SplitText from '@/components/SplitText';
 
 /* ------------ Page ------------ */
 
@@ -60,15 +62,12 @@ export default function Page() {
           } catch {
             try {
               apiMsg = (await r.text())?.trim();
-            } catch {
-              /* ignore */
-            }
+            } catch {}
           }
           throw new Error(apiMsg || `API error ${r.status}`);
         }
 
         const j = (await r.json()) as Weather;
-        console.log("WeatherData: ",j)
         setData(j);
         setDayIdx(0);
       } catch (e: unknown) {
@@ -96,7 +95,7 @@ export default function Page() {
       const { latitude, longitude } = pos.coords;
       const rg = await fetch(`/api/reverse-geocode?lat=${latitude}&lon=${longitude}&lang=en`);
       const rgJson = await rg.json();
-      console.log("rg:", rgJson)
+
       const placeLike: Place = {
         name:
           rgJson?.address?.city ||
@@ -106,7 +105,8 @@ export default function Page() {
           rgJson?.address?.quarter ||
           rgJson?.display_name ||
           'Current Location',
-        admin1: rgJson?.address?.state || rgJson?.address?.state_district || rgJson?.address?.county || undefined,
+        admin1:
+          rgJson?.address?.state || rgJson?.address?.state_district || rgJson?.address?.county || undefined,
         country: rgJson?.address?.country || undefined,
         latitude,
         longitude,
@@ -141,8 +141,7 @@ export default function Page() {
   };
 
   const dayOptions: string[] = useMemo(
-    () =>
-      data?.daily?.time?.map((t) => new Date(t).toLocaleDateString([], { weekday: 'long' })) ?? [],
+    () => data?.daily?.time?.map((t) => new Date(t).toLocaleDateString([], { weekday: 'long' })) ?? [],
     [data],
   );
 
@@ -161,8 +160,14 @@ export default function Page() {
       }));
   }, [data, dayIdx]);
 
+
   return (
     <div className="w-full">
+      {/* ⭐ meteor sparkles background (very light) */}
+      <div className="pointer-events-none fixed inset-0 -z-10 opacity-[.12]">
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff22_1px,transparent_1.5px)] [background-size:22px_22px] animate-star-pan" />
+      </div>
+
       <header className="flex w-full items-center justify-between">
         <div className="flex w-36 items-center gap-3 sm:w-auto">
           <Image src="/assets/images/logo.svg" alt="Weather Now" width={200} height={200} />
@@ -176,9 +181,23 @@ export default function Page() {
         <ErrorState msg={error} onRetry={() => place && load(place.latitude, place.longitude)} />
       ) : (
         <div className="flex flex-col items-center justify-center">
-          <div className="h1 mb-10 mt-5 max-w-[300px] sm:max-w-[350px] text-center lg:max-w-[800px]">
-            How’s the sky looking today?
-          </div>
+
+          <SplitText
+            text="How’s the sky looking today?"
+            className="h1 mb-10 mt-5 max-w-[300px] sm:max-w-[350px] text-center lg:max-w-full"
+            delay={100}
+            duration={0.6}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 40 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="-100px"
+            textAlign="center"
+            // onLetterAnimationComplete={handleAnimationComplete}
+          />
+
+          {/*<Typewriter text="How’s the sky looking today?"/>*/}
 
           <SearchBar
             onSelectAction={handlePlace}
@@ -204,6 +223,7 @@ export default function Page() {
                 <div className="flex flex-col justify-between gap-6">
                   <CurrentCard place={place} data={data} />
 
+                  {/* Metrics (count-up) */}
                   <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
                     <Metric title="Feels Like" value={data.current.apparent_temperature} unit="°" />
                     <Metric
@@ -223,37 +243,36 @@ export default function Page() {
                     />
                   </section>
 
+                  {/* Daily forecast with hover tilt + precip bar */}
                   <section className="space-y-3">
                     <h3 className="font-semibold">Daily forecast</h3>
                     <div className="grid grid-cols-3 gap-3 md:grid-cols-7">
-                      {data.daily.time.map((d, i) => (
-                        <Card
-                          key={d}
-                          className="border-neutral-700 bg-neutral-800 px-2 py-2.5 text-center"
-                        >
-                          <div>{fmtDay(d)}</div>
-                          <div className="flex h-12 items-center justify-center">
-                            <Image
-                              src={iconFor(data.daily.weather_code[i])}
-                              alt=""
-                              width={50}
-                              height={50}
-                            />
-                          </div>
-                          <div className="flex items-center justify-between text-sm text-neutral-200">
-                            <div>
-                              {Math.round(data.daily.temperature_2m_max[i])}
-                              <span aria-hidden className="pl-1 align-top">°</span>
+                      {data.daily.time.map((d, i) => {
+                        return (
+                          <Card
+                            key={d}
+                            className="border-neutral-700 bg-neutral-800 px-2 py-2.5 text-center transform-gpu transition-transform will-change-transform hover:[transform:perspective(900px)_rotateX(3deg)_rotateY(-3deg)] animate-fade-in-up"
+                            style={{ animationDelay: `${i * 30}ms` }}
+                          >
+                            <div>{fmtDay(d)}</div>
+                            <div className="flex h-12 items-center justify-center">
+                              <Image src={iconFor(data.daily.weather_code[i])} alt="" width={50} height={50} />
                             </div>
-                            <div>
-                              <span className="text-neutral-300">
-                                {Math.round(data.daily.temperature_2m_min[i])}
+                            <div className="flex items-center justify-between text-sm text-neutral-200">
+                              <div>
+                                {Math.round(data.daily.temperature_2m_max[i])}
                                 <span aria-hidden className="pl-1 align-top">°</span>
-                              </span>
+                              </div>
+                              <div>
+                                <span className="text-neutral-300">
+                                  {Math.round(data.daily.temperature_2m_min[i])}
+                                  <span aria-hidden className="pl-1 align-top">°</span>
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </Card>
-                      ))}
+                          </Card>
+                        );
+                      })}
                     </div>
                   </section>
                 </div>
@@ -277,14 +296,23 @@ export default function Page() {
 /* ------------ Pieces ------------ */
 
 function Metric({ title, value, unit }: { title: string; value: number; unit: string }) {
+  // animated count-up
+  const mv = useMotionValue(0);
+  const spring = useSpring(mv, { stiffness: 120, damping: 18, mass: 0.6 });
+  const rounded = useTransform(spring, (v) => Math.round(v));
+
+  useEffect(() => {
+    mv.set(value ?? 0);
+  }, [value, mv]);
+
   return (
-    <div className="metric">
+    <Card className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-4 hover:scale-[1.01] transform-gpu transition-transform">
       <div className="text-neutral-300">{title}</div>
-      <div className="text-3xl font-thin text-neutral-100">
-        {Math.round(value)}
+      <div className="pt-3 text-3xl font-thin text-neutral-100">
+        <motion.span>{rounded}</motion.span>
         {['°', '%'].includes(unit) ? unit : ` ${unit}`}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -296,7 +324,7 @@ function LoadingSkeleton() {
         {/* Big “today” card with dotted texture + loader */}
         <Card className="relative h-[285px] overflow-hidden rounded-2xl border border-neutral-700 bg-neutral-800 sm:h-[255px]">
           <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] opacity-20 [background-size:22px_22px]" />
-          <div className="relative grid place-items-center text-xl py-16">
+          <div className="relative grid place-items-center py-16 text-xl">
             <div className="flex items-center gap-2 pb-2">
               <Skeleton className="h-3 w-3 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.2s]" />
               <Skeleton className="h-3 w-3 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.1s]" />
@@ -309,7 +337,10 @@ function LoadingSkeleton() {
         {/* Metrics row */}
         <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {['Feels Like', 'Humidity', 'Wind', 'Precipitation'].map((label) => (
-            <Card key={label} className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-3">
+            <Card
+              key={label}
+              className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-3"
+            >
               <div className="text-neutral-300">{label}</div>
               <div className="pt-3 text-3xl font-thin text-neutral-100">
                 <div>--</div>
@@ -323,7 +354,10 @@ function LoadingSkeleton() {
           <h3 className="font-semibold">Daily forecast</h3>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-7">
             {Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} className="h-[163px] rounded-xl border border-neutral-700 bg-neutral-800" />
+              <Skeleton
+                key={i}
+                className="h-[163px] rounded-xl border border-neutral-700 bg-neutral-800"
+              />
             ))}
           </div>
         </section>
@@ -334,15 +368,24 @@ function LoadingSkeleton() {
         <div className="flex items-center justify-between pr-4 pt-3">
           <div className="text-lg font-semibold">Hourly forecast</div>
           {/* day dropdown placeholder */}
-          <div className="flex items-center gap-2 h-8 place-items-center rounded-md bg-[#3C3B5D] px-3 text-3xl font-thin text-neutral-100">
-            <div className="">-</div><Image src="/assets/images/icon-dropdown.svg" alt="icon-dropdown.svg" width={15} height={15}/>
+          <div className="flex h-8 place-items-center items-center gap-2 rounded-md bg-[#3C3B5D] px-3 text-3xl font-thin text-neutral-100">
+            <div className="">-</div>
+            <Image
+              src="/assets/images/icon-dropdown.svg"
+              alt="icon-dropdown.svg"
+              width={15}
+              height={15}
+            />
           </div>
         </div>
 
         {/* list items placeholders */}
         <div className="space-y-3.5 pr-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-[54.5px] rounded-lg border border-neutral-600 bg-neutral-700" />
+            <Skeleton
+              key={i}
+              className="h-[54.5px] rounded-lg border border-neutral-600 bg-neutral-700"
+            />
           ))}
         </div>
       </Card>
