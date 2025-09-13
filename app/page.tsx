@@ -101,9 +101,11 @@ export default function Page() {
           rgJson?.address?.city ||
           rgJson?.address?.town ||
           rgJson?.address?.village ||
-          rgJson?.name ||
+          rgJson?.address?.suburb ||
+          rgJson?.address?.quarter ||
+          rgJson?.display_name ||
           'Current Location',
-        admin1: rgJson?.address?.state || rgJson?.address?.county || undefined,
+        admin1: rgJson?.address?.state || rgJson?.address?.state_district || rgJson?.address?.county || undefined,
         country: rgJson?.address?.country || undefined,
         latitude,
         longitude,
