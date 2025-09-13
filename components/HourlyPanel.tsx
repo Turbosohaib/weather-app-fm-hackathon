@@ -30,11 +30,10 @@ export default function HourlyPanel({ title, dayOptions, selected, onChange, row
             <Button
               variant="ghost"
               size="sm"
-              className="flex h-8 gap-0 rounded-md bg-[#3C3B5D] text-sm text-neutral-200 hover:bg-[#4a4970]"
+              className="flex h-8 gap-2 rounded-md bg-[#3C3B5D] text-sm text-neutral-200 hover:bg-[#4a4970]"
             >
               {dayOptions[selected]}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
+              <Image src="/assets/images/icon-dropdown.svg" alt="icon-dropdown.svg" width={15} height={15}/>            </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
@@ -59,7 +58,7 @@ export default function HourlyPanel({ title, dayOptions, selected, onChange, row
         </DropdownMenu>
       </div>
 
-      <ul className="max-h-[550px] space-y-3.5 overflow-y-auto pr-4 [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-1">
+      <ul className="max-h-[545px] space-y-3.5 overflow-y-auto pr-4 [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-1">
         {rows.map((r, i) => (
           <li
             key={i}

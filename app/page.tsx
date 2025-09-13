@@ -200,7 +200,7 @@ export default function Page() {
           {!loading && !error && place && data && (
             <>
               <section className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
-                <div className="flex flex-col justify-between gap-6">
+                <div className="flex flex-col justify-between gap-2">
                   <CurrentCard place={place} data={data} />
 
                   <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -295,13 +295,13 @@ function LoadingSkeleton() {
         {/* Big “today” card with dotted texture + loader */}
         <Card className="relative h-[285px] overflow-hidden rounded-2xl border border-neutral-700 bg-neutral-800 sm:h-[250px]">
           <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] opacity-20 [background-size:22px_22px]" />
-          <div className="relative grid place-items-center py-16">
+          <div className="relative grid place-items-center text-xl py-16">
             <div className="flex items-center gap-2 pb-2">
-              <Skeleton className="h-2.5 w-2.5 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.2s]" />
-              <Skeleton className="h-2.5 w-2.5 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.1s]" />
-              <Skeleton className="h-2.5 w-2.5 animate-bounce rounded-full bg-neutral-200/90" />
+              <Skeleton className="h-3 w-3 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.2s]" />
+              <Skeleton className="h-3 w-3 animate-bounce rounded-full bg-neutral-200/90 [animation-delay:-0.1s]" />
+              <Skeleton className="h-3 w-3 animate-bounce rounded-full bg-neutral-200/90" />
             </div>
-            <Skeleton className="h-4 w-24 bg-neutral-700" />
+            <div>Loading...</div>
           </div>
         </Card>
 
@@ -311,7 +311,7 @@ function LoadingSkeleton() {
             <Card key={label} className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-4">
               <div className="text-neutral-300">{label}</div>
               <div className="pt-3 text-3xl font-thin text-neutral-100">
-                <Skeleton className="h-8 w-16 bg-neutral-700" />
+                <div>--</div>
               </div>
             </Card>
           ))}
@@ -333,8 +333,8 @@ function LoadingSkeleton() {
         <div className="flex items-center justify-between pr-4 pt-1">
           <div className="text-lg font-semibold">Hourly forecast</div>
           {/* day dropdown placeholder */}
-          <div className="grid h-8 place-items-center rounded-md bg-[#3C3B5D] px-3 text-sm text-neutral-200 opacity-70">
-            <Skeleton className="h-4 w-8 bg-neutral-700" />
+          <div className="flex items-center gap-2 h-8 place-items-center rounded-md bg-[#3C3B5D] px-3 text-3xl font-thin text-neutral-100">
+            <div className="">-</div><Image src="/assets/images/icon-dropdown.svg" alt="icon-dropdown.svg" width={15} height={15}/>
           </div>
         </div>
 
