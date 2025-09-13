@@ -68,6 +68,7 @@ export default function Page() {
         }
 
         const j = (await r.json()) as Weather;
+        console.log("WeatherData: ",j)
         setData(j);
         setDayIdx(0);
       } catch (e: unknown) {
@@ -95,7 +96,7 @@ export default function Page() {
       const { latitude, longitude } = pos.coords;
       const rg = await fetch(`/api/reverse-geocode?lat=${latitude}&lon=${longitude}&lang=en`);
       const rgJson = await rg.json();
-
+      console.log("rg:", rgJson)
       const placeLike: Place = {
         name:
           rgJson?.address?.city ||
@@ -224,7 +225,7 @@ export default function Page() {
 
                   <section className="space-y-3">
                     <h3 className="font-semibold">Daily forecast</h3>
-                    <div className="grid grid-cols-3 gap-2 md:grid-cols-7">
+                    <div className="grid grid-cols-3 gap-3 md:grid-cols-7">
                       {data.daily.time.map((d, i) => (
                         <Card
                           key={d}
@@ -293,7 +294,7 @@ function LoadingSkeleton() {
       {/* LEFT COLUMN */}
       <div className="flex flex-col gap-6">
         {/* Big “today” card with dotted texture + loader */}
-        <Card className="relative h-[285px] overflow-hidden rounded-2xl border border-neutral-700 bg-neutral-800 sm:h-[250px]">
+        <Card className="relative h-[285px] overflow-hidden rounded-2xl border border-neutral-700 bg-neutral-800 sm:h-[255px]">
           <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] opacity-20 [background-size:22px_22px]" />
           <div className="relative grid place-items-center text-xl py-16">
             <div className="flex items-center gap-2 pb-2">
@@ -308,7 +309,7 @@ function LoadingSkeleton() {
         {/* Metrics row */}
         <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {['Feels Like', 'Humidity', 'Wind', 'Precipitation'].map((label) => (
-            <Card key={label} className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-4">
+            <Card key={label} className="rounded-xl border border-neutral-700 bg-neutral-800 px-5 py-3">
               <div className="text-neutral-300">{label}</div>
               <div className="pt-3 text-3xl font-thin text-neutral-100">
                 <div>--</div>

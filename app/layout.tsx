@@ -7,6 +7,7 @@ import React from 'react';
 export const metadata: Metadata = {
   title: 'Weather Now',
   description: 'FM30 Weather App',
+  icons: ["./favicon.ico"]
 };
 
 // Body font (DM Sans) – weights per style guide
@@ -33,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${fontSans.variable} ${fontDisplay.variable} bg-background font-sans antialiased`}
       >
-        <div className="flex w-full justify-center overflow-auto [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-2">
-          <main className="w-full px-4 pb-10 pt-4 md:px-6 lg:max-w-6xl lg:py-8">{children}</main>
+        <div className="flex w-full h-full px-4 pb-10 pt-4 md:px-6 lg:py-8 justify-center overflow-auto [&::-webkit-scrollbar-thumb]:cursor-pointer [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-700 hover:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar]:w-2">
+          <main className="w-full lg:max-w-6xl">{children}</main>
         </div>
       </body>
     </html>
